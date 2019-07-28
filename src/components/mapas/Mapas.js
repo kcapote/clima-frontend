@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { Map, InfoWindow, Marker, GoogleApiWrapper } from 'google-maps-react';
 import Spinner from '../spinner/Spinner';
-const APY_KEY = '';
+const APY_KEY = process.env.REACT_APP_API_MAP_KEY;
 
 class Mapas extends Component {
     state = { 
