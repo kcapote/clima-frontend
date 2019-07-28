@@ -11,9 +11,11 @@ const Climas = () => {
     const [ climas, guardarClimas ] = useState([]);
     const [ cargando, guardarCargando ] = useState(false);
     const [ seg, setSegundo ] = useState(0);
+    const [ primeraVez, guardarPrimeraVez ] = useState(true);
 
     useEffect(() => {
         socket = socketIOClient(endpoint);
+        cargarClimas();
         return () => {
             socket.close(); 
             clearInterval(intervalo);
@@ -22,6 +24,9 @@ const Climas = () => {
 
 
     useEffect(()=>{
+
+        if (primeraVez) return;
+
         let time = 0;
         clearInterval(intervalo);
 
@@ -42,14 +47,14 @@ const Climas = () => {
         guardarCargando(true);
         socket.emit('cargarClimas', {}            
         ,(climas) => {
-            console.log(climas);
             if(climas){
+                guardarPrimeraVez(false);
                 guardarClimas(climas);
             }else{
+                guardarPrimeraVez(false);
                 guardarClimas([]);
             }
             guardarCargando(false);
-            
         });
 
     };
