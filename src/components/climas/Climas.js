@@ -3,14 +3,23 @@ import Clima from './Clima';
 import Spinner from '../spinner/Spinner';
 import socketIOClient from "socket.io-client";
 const endpoint = '127.0.0.1:3001';
-const socket = socketIOClient(endpoint);
+let socket;
 let intervalo;
 
 const Climas = () => {
      
-    const [ climas, setClimas ] = useState([]);
-    const [ cargando, setCargando ] = useState(false);
+    const [ climas, guardarClimas ] = useState([]);
+    const [ cargando, guardarCargando ] = useState(false);
     const [ seg, setSegundo ] = useState(0);
+
+    useEffect(() => {
+        socket = socketIOClient(endpoint);
+        return () => {
+            socket.close(); 
+            clearInterval(intervalo);
+        }
+    }, []);
+
 
     useEffect(()=>{
         let time = 0;
@@ -20,32 +29,28 @@ const Climas = () => {
            cargarClimas();
         }, 10000);
 
-        intervalo = setInterval(function(){
+        intervalo = setInterval(()=>{
             time = time +1;
             setSegundo(time);
         }, 1000);
 
-        
-        
-      
     },[climas]);
 
 
-    // function myFn() {console.log('idle');}
-    // var myTimer = setInterval(myFn, 4000);
-    // // Then, later at some future time, 
-    // // to restart a new 4 second interval starting at this exact moment in time
-    // clearInterval(myTimer);
-    // myTimer = setInterval(myFn, 4000);
 
     const cargarClimas = () => {
-        console.log('cargando clima');
-        setCargando(true);
+        guardarCargando(true);
         socket.emit('cargarClimas', {}            
         ,(climas) => {
-            setClimas(climas);
-            setCargando(false);
-        });  
+            console.log(climas);
+            if(climas){
+                guardarClimas(climas);
+            }else{
+                guardarClimas([]);
+            }
+            guardarCargando(false);
+            
+        });
 
     };
     
@@ -56,9 +61,13 @@ const Climas = () => {
             <Fragment>
                 <h1 className="mt-5">Climas - <small>Segundos desde la última actualización { seg } </small>  </h1>
                 <div className="row mt-5">
-                    {climas.map( clima =>    
+                    {climas.length>0 && !climas[0].code ? 
+                    climas.map( clima =>    
                         <Clima key={clima.horaFormateada} clima={clima}/>
-                    )}
+                    )
+                    :
+                        <div>Sin datos para mostrar !!! </div>
+                    }
                 </div>                
             </Fragment>
         );

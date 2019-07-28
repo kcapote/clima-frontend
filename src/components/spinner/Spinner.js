@@ -1,6 +1,6 @@
 import React from 'react';
 import './spinner.css';
-const Spinner = () => {
+const Spinner = (props) => {
     return (  
         <div className="spinner">
             <div className="dot1"> </div>
