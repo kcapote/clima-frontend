@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
+const endpoint = `https://infinite-fortress-26929.herokuapp.com/erroresLogs`;
 
 const Logs = () => {
 
@@ -7,7 +8,7 @@ const Logs = () => {
 
     useEffect( () => {
         const cargarErrores = async () => {
-            const respuesta = await axios.get('http://localhost:3001/erroresLogs');
+            const respuesta = await axios.get(endpoint);
             const {logs} = respuesta.data; 
             guardarLogs(logs);
         };

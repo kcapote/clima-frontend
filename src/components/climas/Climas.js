@@ -2,7 +2,8 @@ import React, { useState, useEffect, Fragment } from 'react';
 import Clima from './Clima';
 import Spinner from '../spinner/Spinner';
 import socketIOClient from "socket.io-client";
-const endpoint = '127.0.0.1:3001';
+const endpoint = `https://infinite-fortress-26929.herokuapp.com`;
+
 let socket;
 let intervalo;
 

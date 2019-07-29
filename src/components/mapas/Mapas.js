@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Map, InfoWindow, Marker, GoogleApiWrapper } from 'google-maps-react';
 import Spinner from '../spinner/Spinner';
 const APY_KEY = process.env.REACT_APP_API_MAP_KEY;
-
+const endpoint = `https://infinite-fortress-26929.herokuapp.com/climas`;
 class Mapas extends Component {
     state = { 
         climas: [],
@@ -20,7 +20,7 @@ class Mapas extends Component {
     
     componentDidMount = async () => {
         this.setState({...this.state, cargando: true});
-        const resp =  await axios.get('http://localhost:3001/climas');
+        const resp =  await axios.get(endpoint);
         this.setState({
             ...this.state,
             climas: resp.data.climas
